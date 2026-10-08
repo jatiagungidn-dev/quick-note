@@ -4,7 +4,7 @@ import { createNoteSchema, updateNoteSchema } from "./notes.schema.js";
 
 const router = Router();
 
-router.get("/", (_req, res) => {
+router.get("/", (_req, res, next) => {
   try {
     const notes = db
       .prepare(
@@ -22,14 +22,11 @@ router.get("/", (_req, res) => {
 
     res.status(200).json({ count: notes.length, data: notes });
   } catch (err) {
-    if (err instanceof Error) {
-      return res.status(500).json({ message: err.message });
-    }
-    res.status(500).json({ message: "Internal Server Error" });
+    next(err);
   }
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", (req, res, next) => {
   try {
     const id = Number(req.params.id);
 
@@ -57,14 +54,11 @@ router.get("/:id", (req, res) => {
 
     res.status(200).json({ data: note });
   } catch (err) {
-    if (err instanceof Error) {
-      return res.status(500).json({ message: err.message });
-    }
-    res.status(500).json({ message: "Internal Server Error" });
+    next(err);
   }
 });
 
-router.post("/", (req, res) => {
+router.post("/", (req, res, next) => {
   try {
     const result = createNoteSchema.safeParse(req.body);
 
@@ -86,14 +80,11 @@ router.post("/", (req, res) => {
 
     res.status(201).json({ message: "Note added successfully", data: newNote });
   } catch (err) {
-    if (err instanceof Error) {
-      return res.status(500).json({ message: err.message });
-    }
-    res.status(500).json({ message: "Internal Server Error" });
+    next(err);
   }
 });
 
-router.patch("/:id", (req, res) => {
+router.patch("/:id", (req, res, next) => {
   try {
     const id = Number(req.params.id);
 
@@ -138,14 +129,11 @@ router.patch("/:id", (req, res) => {
       .status(200)
       .json({ message: "Note updated successfully", data: updated });
   } catch (err) {
-    if (err instanceof Error) {
-      return res.status(500).json({ message: err.message });
-    }
-    res.status(500).json({ message: "Internal Server Error" });
+    next(err);
   }
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", (req, res, next) => {
   try {
     const id = Number(req.params.id);
 
@@ -170,10 +158,7 @@ router.delete("/:id", (req, res) => {
       .status(200)
       .json({ message: "Note deleted successfully", changes: deleted.changes });
   } catch (err) {
-    if (err instanceof Error) {
-      return res.status(500).json({ message: err.message });
-    }
-    res.status(500).json({ message: "Internal Server Error" });
+    next(err);
   }
 });
 
