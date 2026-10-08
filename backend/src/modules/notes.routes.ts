@@ -1,5 +1,6 @@
 import { Router } from "express";
 import db from "../config/db.js";
+import { createNoteSchema, updateNoteSchema } from "./notes.schema.js";
 
 const router = Router();
 
@@ -65,11 +66,13 @@ router.get("/:id", (req, res) => {
 
 router.post("/", (req, res) => {
   try {
-    const { content } = req.body;
+    const result = createNoteSchema.safeParse(req.body);
 
-    if (typeof content !== "string" || !content.trim()) {
-      return res.status(400).json({ message: "Content cannot be empty" });
+    if (!result.success) {
+      return res.status(400).json({ message: result.error.issues[0].message });
     }
+
+    const { content } = result.data;
 
     const newNote = db
       .prepare(
@@ -79,7 +82,7 @@ router.post("/", (req, res) => {
         RETURNING id, content, created_at, updated_at
     `,
       )
-      .get(content.trim());
+      .get(content);
 
     res.status(201).json({ message: "Note added successfully", data: newNote });
   } catch (err) {
@@ -98,18 +101,20 @@ router.patch("/:id", (req, res) => {
       return res.status(400).json({ message: "Invalid note id" });
     }
 
-    const { content } = req.body;
+    const result = updateNoteSchema.safeParse(req.body);
 
-    if (typeof content !== "string" || !content.trim()) {
-      return res.status(400).json({ message: "Content cannot be empty" });
+    if (!result.success) {
+      return res.status(400).json({ message: result.error.issues[0].message });
     }
+
+    const { content } = result.data;
 
     const updates = [];
     const values = [];
 
     if (content !== undefined) {
       updates.push("content = ?");
-      values.push(content.trim());
+      values.push(content);
     }
 
     values.push(id);
