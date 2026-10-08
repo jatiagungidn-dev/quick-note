@@ -1,9 +1,9 @@
 import express from "express";
 import notesRouter from "./modules/notes.routes.js";
 import errorHandler from "./middleware/errorHandler.js";
+import { env } from "./config/env.js";
 
 const app = express();
-const PORT = 3000;
 
 app.use(express.json());
 
@@ -14,6 +14,6 @@ app.get("/", (_req, res) => {
 app.use("/api/notes", notesRouter);
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(env.PORT, () => {
+  console.log(`Server running on http://localhost:${env.PORT}`);
 });
