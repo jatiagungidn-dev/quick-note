@@ -1,75 +1,118 @@
 #root {
   width: 100%;
+  min-height: 100vh;
 }
 
 .app {
   width: min(100% - 32px, 720px);
   margin: 0 auto;
-  padding: 64px 0;
+  padding: 48px 0 64px;
 }
 
 .app-header {
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .app-header h1 {
   margin: 0;
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 750;
   letter-spacing: -1.5px;
+  line-height: 1.15;
 }
 
 .app-header p {
-  margin-top: 8px;
-  color: #6b7280;
+  margin-top: 10px 0 0;
+  color: #a1a1aa;
+  line-height: 1.6;
 }
 
 .note-editor {
   padding: 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  background: #ffffff;
+  border: 1px solid #3f3f46;
+  border-radius: 14px;
+  background: #151515;
+  transition: border-color 160ms ease;
+}
+
+.note-editor:focus-within {
+  border-color: #52525b;
 }
 
 .note-editor textarea {
   display: block;
   width: 100%;
   min-height: 120px;
-  padding: 8px;
-  border: none;
+  padding: 10px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #f3f4f6;
   outline: none;
   resize: vertical;
+  line-height: 1.6;
+}
+
+.note-editor textarea::placeholder {
+  color: #85858f;
+}
+
+.note-editor textarea:focus-visible {
+  outline: none;
+}
+
+.note-editor button,
+.note-actions button {
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
   font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
 }
 
 .note-editor button {
   display: block;
   margin: 12px 0 0 auto;
   padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  background: #171717;
-  color: #ffffff;
-  font: inherit;
-  cursor: pointer;
+  font-weight: 600;
+  background: #f3f4f6;
+  color: #18181b;
+}
+
+.note-editor button:hover {
+  background: #d4d4d8;
 }
 
 .notes-section {
-  margin-top: 40px;
+  margin-top: 36px;
 }
 
 .notes-section h2 {
+  margin: 0 0 16px;
   font-size: 1.125rem;
+  font-weight: 650;
+  letter-spacing: -0.25px;
 }
 
 .empty-state {
-  padding: 24px 0;
-  color: #6b7280;
+  padding: 28px 16px;
+  border: 1px dashed #3f3f46;
+  border-radius: 12px;
+  color: #a1a1aa;
   text-align: center;
+  line-height: 1.6;
 }
 
 .notes-list {
   display: grid;
   gap: 12px;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -79,25 +122,55 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
+  min-width: 0;
   padding: 16px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #35353b;
   border-radius: 12px;
-  background: #ffffff;
+  background: #151515;
+  transition: border-color 160ms ease;
+}
+
+.note-card:hover {
+  border-color: #52525b;
 }
 
 .note-card p {
   flex: 1;
-  margin: 0;
+  min-width: 0;
+  margin: 2px 0 0;
+  color: #e4e4e7;
+  line-height: 1.65;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 
-.delete-button {
-  padding: 6px 10px;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  background: #ffffff;
-  cursor: pointer;
+.note-actions {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.note-actions button {
+  background: #27272a;
+  border-color: #3f3f46;
+  color: #e4e4e7;
+}
+
+.note-actions button:hover {
+  background: #3f3f46;
+}
+
+.note-actions .delete-button {
+  background: transparent;
+  border-color: #52525b;
+  color: #d4d4d8;
+}
+
+.note-actions .delete-button:hover {
+  background: #3f2024;
+  border-color: #7f303b;
+  color: #fecdd3;
 }
 
 .edit-form {
@@ -105,32 +178,63 @@
   flex-direction: column;
   gap: 12px;
   width: 100%;
+  min-width: 0;
 }
 
 .edit-form textarea {
+  display: block;
   width: 100%;
   min-height: 100px;
   padding: 12px;
-  font: inherit;
+  border: 1px solid #3f3f46;
+  border-radius: 8px;
+  background: #202023;
+  color: #f3f4f6;
+  line-height: 1.6;
   resize: vertical;
 }
 
-.note-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.note-actions button {
-  cursor: pointer;
+.edit-form textarea:focus-visible {
+  border-color: #93c5fd;
 }
 
 @media (max-width: 480px) {
   .app {
-    padding-top: 40px;
+    width: min(100% - 28px, 720px);
+    padding: 36px 0 48px;
   }
 
-  .app-header h1 {
-    font-size: 2rem;
+  .app-header {
+    margin-bottom: 26px;
+  }
+
+  .note-editor {
+    padding: 12px;
+  }
+
+  .notes-section {
+    margin-top: 30px;
+  }
+
+  .note-card {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .note-actions {
+    gap: 6px;
+  }
+
+  .note-actions button {
+    padding: 7px 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
