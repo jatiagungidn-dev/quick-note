@@ -100,6 +100,31 @@
   cursor: pointer;
 }
 
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.edit-form textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  font: inherit;
+  resize: vertical;
+}
+
+.note-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.note-actions button {
+  cursor: pointer;
+}
+
 @media (max-width: 480px) {
   .app {
     padding-top: 40px;
