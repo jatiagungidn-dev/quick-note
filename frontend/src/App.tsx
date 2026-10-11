@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 
 type Note = {
@@ -21,6 +21,11 @@ function App() {
   const [actionError, setActionError] = useState<string | null>(null);
   const [editingNoteId, setEditingNoteId] = useState<number | null>(null);
   const [editContent, setEditContent] = useState("");
+  const noteInputRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    noteInputRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     async function fetchNotes() {
@@ -73,6 +78,7 @@ function App() {
       setNotes((currentNotes) => [result.data, ...currentNotes]);
 
       setContent("");
+      noteInputRef.current?.focus();
     } catch {
       setActionError("Could not save note. Please try again");
     }
@@ -160,6 +166,7 @@ function App() {
 
       <section className="note-editor">
         <textarea
+          ref={noteInputRef}
           placeholder="What's on your mind?"
           aria-label="Write a note"
           value={content}
